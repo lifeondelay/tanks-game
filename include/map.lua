@@ -54,9 +54,9 @@ function Map:map()
         end
     end
 
-    for i = 1, #real_map do
-        print(real_map[i].x .. ", " .. real_map[i].y)
-    end
+    -- for i = 1, #real_map do
+    --     print(real_map[i].x .. ", " .. real_map[i].y)
+    -- end
 
     return real_map
 end
@@ -64,9 +64,9 @@ end
 function Map:isColliding(x, y, size)
     for i = 1, #self.real_map do
         if (x + size > self.real_map[i].x)
-        and (x < self.real_map[i].x)
-        and (y >= self.real_map[i].y)
-        and (y >= self.real_map[i].y) then
+        and (x < self.real_map[i].x + self.block_size)
+        and (y + size > self.real_map[i].y)
+        and (y < self.real_map[i].y + self.block_size) then
             print("colliding")
         end
     end

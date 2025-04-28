@@ -36,7 +36,7 @@ end
 
 function love.update(dt)
     player:update(dt)
-    -- map:isColliding(player.x, player.y)
+    map:isColliding(player.x, player.y, player.radius)
 end
 
 function love.draw()
