@@ -6,24 +6,31 @@ local Projectile = Actor:extend()
 -- Takes the game physics world, starting x and y coords, radius
 -- the direction it was fired from, its density, and how long it should fly for.
 -- Also how much damage it does!
-function Projectile:new(world, x, y, mx, my, radius, impulse, density, lifetime, damage)
+function Projectile:new(world, x, y, mx, my, radius, force, density, lifetime, damage)
     local dx, dy = x - mx, y - my
 
     local d = math.sqrt ( dx * dx + dy * dy )
     local ndx, ndy = dx / d, dy / d
 
-    self.impulseX = - ndx * impulse
-    self.impulseY = - ndy * impulse
+    self.forceX = - ndx * force
+    self.forceY = - ndy * force
 
 
     self.body = love.physics.newBody(world, x, y, "dynamic")
     self.shape = love.physics.newCircleShape(radius)
     self.fixture = love.physics.newFixture(self.body, self.shape, density)
+
+    self.lifetime = lifetime or 1
+    self.timer = 0
 end
 
 function Projectile:update(dt)
-    self.body:applyLinearImpulse(self.impulseX, self.impulseY)
-    -- print(self.body:getX() .. ", " .. self.body:getY())
+
+    if self.timer < self.lifetime then
+        self.body:applyForce(self.forceX, self.forceY)
+        self.timer = self.timer + dt
+    end
+
 end
 
 function Projectile:draw()
