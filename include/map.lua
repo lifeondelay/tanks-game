@@ -61,13 +61,15 @@ function Map:map()
     return real_map
 end
 
-function Map:isColliding(x, y, size)
+function Map:isColliding(player)
     for i = 1, #self.real_map do
-        if (x + size > self.real_map[i].x)
-        and (x < self.real_map[i].x + self.block_size)
-        and (y + size > self.real_map[i].y)
-        and (y < self.real_map[i].y + self.block_size) then
-            print("colliding")
+        if (player.x + player.radius > self.real_map[i].x)
+        and (player.x < self.real_map[i].x + self.block_size)
+        and (player.y + player.radius > self.real_map[i].y)
+        and (player.y < self.real_map[i].y + self.block_size) then
+            player.isColliding = true
+        else
+            -- player.isColliding = false
         end
     end
 end
