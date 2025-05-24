@@ -1,4 +1,5 @@
 local Actor = require("include.actor")
+local Projectile = require("include.projectile.projectile")
 
 local Player = Actor:extend()
 
@@ -16,6 +17,8 @@ function Player:new(world, x, y, radius)
         self.body, self.shape, 2
     )
     self.fixture:setRestitution(0.9)
+
+    self.projectiles = {}
 end
 
 function Player:draw()
@@ -24,7 +27,7 @@ function Player:draw()
     love.graphics.setColor(0, 0, 0)
 end
 
-function Player:update(dt)
+function Player:update(dt, world)
     if love.keyboard.isDown("w") then
         self.body:applyForce(0, -1000)
     end
@@ -41,9 +44,16 @@ function Player:update(dt)
         self.body:applyForce(1000, 0)
     end
 
+    for i = 1, #self.projectiles do
+        self.projectiles[i]:update(dt)
+    end
+
     self.x = self.body:getX()
     self.y = self.body:getY()
 end
 
+function Player:shoot(world, mx, my)
+    table.insert(self.projectiles, Projectile(world, self.x, self.y, mx, my, 5, 30, 3, 3, 10))
+end
 
 return Player

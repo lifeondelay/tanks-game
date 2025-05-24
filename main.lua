@@ -47,6 +47,15 @@ function love.draw()
     -- draw the player
     player:draw()
 
+    love.graphics.setColor(0, 0, 0)
+
+
+    for i =1, #player.projectiles do
+        player.projectiles[i]:draw()
+    end
+
+    love.graphics.setColor(1, 1, 1)
+
     -- draw the map
     map:draw(width, height)
 
@@ -55,3 +64,8 @@ function love.draw()
     love.graphics.setBackgroundColor(1, 1, 1)
 end
 
+function love.mousepressed(x, y, button, istouch)
+   if button == 1 then
+      player:shoot(world, x, y)
+   end
+end
