@@ -17,11 +17,16 @@ function Player:new(world, x, y, radius)
         self.body, self.shape, 2
     )
     self.fixture:setRestitution(0.9)
-
+    self.gunBarrel = {}
     self.projectiles = {}
 end
 
 function Player:draw()
+
+
+    -- Draw line pointing to mouse
+    love.graphics.line(self.x, self.y, self.gunBarrel.x, self.gunBarrel.y)
+
     love.graphics.setColor(1, 0, 0)
     love.graphics.circle("fill", self.x, self.y, self.radius)
     love.graphics.setColor(0, 0, 0)
@@ -50,10 +55,39 @@ function Player:update(dt, world)
 
     self.x = self.body:getX()
     self.y = self.body:getY()
+    self.gunBarrel = self:getBarrel()
 end
 
+-- Fire a projectile
 function Player:shoot(world, mx, my)
-    table.insert(self.projectiles, Projectile(world, self.x, self.y, mx, my, 5, 30, 3, 3, 10))
+    table.insert(self.projectiles, Projectile(world, self.gunBarrel.x, self.gunBarrel.y, mx, my, 5, 30, 3, 3, 10))
+end
+
+-- Get location of end-of-barrel to shoot from
+-- Also used for drawing directional gun barrel for tank
+function Player:getBarrel()
+    -- Get mouse position
+    local mx, my = love.mouse.getPosition()
+
+    -- Vector from center to mouse
+    local dx = mx - self.x
+    local dy = my - self.y
+
+    -- Normalize the vector
+    local length = math.sqrt(dx*dx + dy*dy)
+    if length == 0 then length = 1 end  -- Prevent division by zero
+    local nx = dx / length
+    local ny = dy / length
+
+    -- Scale to 20 pixels
+    local lineLength = 20
+
+    local ends = {}
+
+    ends.x = self.x + nx * lineLength
+    ends.y = self.y + ny * lineLength
+
+    return ends
 end
 
 return Player

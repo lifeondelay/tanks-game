@@ -49,7 +49,7 @@ function love.draw()
 
     love.graphics.setColor(0, 0, 0)
 
-
+    --- Draw the players bullets
     for i =1, #player.projectiles do
         player.projectiles[i]:draw()
     end

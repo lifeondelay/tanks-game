@@ -5,20 +5,20 @@ local Projectile = Actor:extend()
 -- Create a new projectile.
 -- Takes the game physics world, starting x and y coords, radius
 -- the direction it was fired from, its density, and how long it should fly for.
--- Also how much damage it does :)
+-- Also how much damage it does!
 function Projectile:new(world, x, y, mx, my, radius, impulse, density, lifetime, damage)
-    self.body = love.physics.newBody(world, x, y, "dynamic")
-    self.shape = love.physics.newCircleShape(radius)
-    self.fixture = love.physics.newFixture(self.body, self.shape, density)
-
     local dx, dy = x - mx, y - my
 
     local d = math.sqrt ( dx * dx + dy * dy )
     local ndx, ndy = dx / d, dy / d
 
-    self.impulseX = ndx * impulse
-    self.impulseY = ndy * impulse
+    self.impulseX = - ndx * impulse
+    self.impulseY = - ndy * impulse
 
+
+    self.body = love.physics.newBody(world, x, y, "dynamic")
+    self.shape = love.physics.newCircleShape(radius)
+    self.fixture = love.physics.newFixture(self.body, self.shape, density)
 end
 
 function Projectile:update(dt)
