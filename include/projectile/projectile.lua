@@ -21,22 +21,10 @@ function Projectile:new(world, x, y, mx, my, radius, force, density, lifetime, d
     self.fixture = love.physics.newFixture(self.body, self.shape, density)
 
     self.lifetime = lifetime or 1
+    self.damage = damage
     self.timer = 0
 end
 
-function Projectile:update(dt)
 
-    if self.timer < self.lifetime then
-        self.body:applyForce(self.forceX, self.forceY)
-        self.timer = self.timer + dt
-    end
-
-end
-
-function Projectile:draw()
-    love.graphics.setBackgroundColor(0, 1, 0)
-    love.graphics.circle("fill", self.body:getX(), self.body:getY(), self.shape:getRadius())
-    love.graphics.setBackgroundColor(1, 1, 1)
-end
 
 return Projectile

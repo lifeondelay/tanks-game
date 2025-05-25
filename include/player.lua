@@ -1,5 +1,5 @@
 local Actor = require("include.actor")
-local Projectile = require("include.projectile.projectile")
+local Bullet = require("include.projectile.bullet")
 
 local Player = Actor:extend()
 
@@ -60,7 +60,7 @@ end
 
 -- Fire a projectile
 function Player:shoot(world, mx, my)
-    table.insert(self.projectiles, Projectile(world, self.gunBarrel.x, self.gunBarrel.y, mx, my, 5, 30, 3, 3, 10))
+    table.insert(self.projectiles, Bullet(world, self.gunBarrel.x, self.gunBarrel.y, mx, my, 5, 30, 3, 3, 10))
 end
 
 -- Get location of end-of-barrel to shoot from
