@@ -22,6 +22,7 @@ function Player:new(world, x, y, radius)
 end
 
 function Player:draw()
+    local text = self.body:getX() .. ", " .. self.body:getY()
 
 
     -- Draw line pointing to mouse
@@ -29,7 +30,8 @@ function Player:draw()
 
     love.graphics.setColor(1, 0, 0)
     love.graphics.circle("fill", self.x, self.y, self.radius)
-    love.graphics.setColor(0, 0, 0)
+        love.graphics.setColor(0, 0, 0)
+    love.graphics.print(text, self.body:getX(), self.body:getY())
 end
 
 function Player:update(dt, world)
@@ -59,6 +61,7 @@ function Player:update(dt, world)
 end
 
 -- Fire a projectile
+-- Psawn projectile at position of end of gunbarrel
 function Player:shoot(world, mx, my)
     table.insert(self.projectiles, Bullet(world, self.gunBarrel.x, self.gunBarrel.y, mx, my, 5, 30, 3, 3, 10))
 end

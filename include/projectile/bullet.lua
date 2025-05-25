@@ -18,9 +18,12 @@ function Bullet:update(dt)
 end
 
 function Bullet:draw()
-    love.graphics.setBackgroundColor(0, 1, 0)
+    local text = self.body:getX() .. ", " .. self.body:getY()
+    love.graphics.setColor(0, 0, 0)
     love.graphics.circle("fill", self.body:getX(), self.body:getY(), self.shape:getRadius())
-    love.graphics.setBackgroundColor(1, 1, 1)
+    love.graphics.setColor(0, 0, 0)
+    love.graphics.print(text, self.body:getX(), self.body:getY())
+
 end
 
 return Bullet

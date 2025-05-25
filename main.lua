@@ -1,6 +1,7 @@
 local Player = require("include.player")
 local Map = require("include.map.map")
 local TargetSmall = require("include.targets.targetSmall")
+local TargetUtils = require("include.targets.targetUtils")
 
 love.window.setMode(800, 800)
 
@@ -31,18 +32,11 @@ local new_map =
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
 }
 
-function PopulateTargets()
-    for i = 1, 10 do
-        local target = TargetSmall(world, width /2, height/2)
-        table.insert(targets, target)
-    end
-end
-
 local map = Map(world, 16, 16, new_map)
 
 function love.load()
-    PopulateTargets()
     -- love.physics.setMeter(64)
+    targets = TargetUtils.populateMap(world, width, height, map.real_map, player)
 end
 
 
@@ -60,14 +54,14 @@ function love.draw()
     love.graphics.setColor(0, 0, 0)
 
     --- Draw the players bullets
-    for i =1, #player.projectiles do
-        player.projectiles[i]:draw()
+    for _, projectile in ipairs(player.projectiles) do
+        projectile:draw()
     end
 
     love.graphics.setColor(1, 1, 1)
 
-    for i = 1, #targets do
-        targets[i]:draw()
+    for _, target in ipairs(targets) do
+        target:draw()
     end
 
     -- draw the map

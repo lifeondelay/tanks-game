@@ -2,6 +2,7 @@ local Object = require("include.classic")
 local Block = require("include.map.block")
 
 local Map = Object:extend()
+local real_map = {}
 
 local screenX, screenY = love.window.getMode()
 
@@ -40,12 +41,14 @@ function Map:new(world, width, height, walls)
     self.block_size = (screenX / self.width) or 50
 
     self.walls = walls or self.default_map(self)
-    self.real_map = self.map(self, world)
+
+    self.map(self, world)
+
+    self.real_map = real_map
 end
 
 -- Creates a table of rectangles based on the 2d array for the map
 function Map:map(world)
-    local real_map = {}
     for i = 1, self.width do
         for j = 1, self.height do
             if self.walls[i][j] == 1 then
@@ -59,13 +62,12 @@ function Map:map(world)
             end
         end
     end
-    return real_map
 end
 
 function Map:draw()
-    for i = 1, #self.real_map do
+    for _, block in ipairs(self.real_map) do
         love.graphics.setColor(0, 0, 0)
-        love.graphics.polygon("line", self.real_map[i].body:getWorldPoints(self.real_map[i].shape:getPoints()))
+        love.graphics.polygon("line", block.body:getWorldPoints(block.shape:getPoints()))
         love.graphics.setColor(0, 0, 0)
     end
 end
