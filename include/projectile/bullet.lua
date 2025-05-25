@@ -22,7 +22,7 @@ function Bullet:draw()
     love.graphics.setColor(0, 0, 0)
     love.graphics.circle("fill", self.body:getX(), self.body:getY(), self.shape:getRadius())
     love.graphics.setColor(0, 0, 0)
-    love.graphics.print(text, self.body:getX(), self.body:getY())
+    -- love.graphics.print(text, self.body:getX(), self.body:getY())
 
 end
 

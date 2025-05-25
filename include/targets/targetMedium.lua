@@ -7,6 +7,7 @@ function TargetMedium:new(world, x, y)
     local score = 10
     local shape = love.physics.newCircleShape(20)
     local body = love.physics.newBody(world, x, y, "dynamic")
+    body:setLinearDamping(1)
     TargetMedium.super.new(self, world, x, y, health, score, body, shape, 20)
 end
 

@@ -30,8 +30,8 @@ function Player:draw()
 
     love.graphics.setColor(1, 0, 0)
     love.graphics.circle("fill", self.x, self.y, self.radius)
-        love.graphics.setColor(0, 0, 0)
-    love.graphics.print(text, self.body:getX(), self.body:getY())
+    love.graphics.setColor(0, 0, 0)
+    -- love.graphics.print(text, self.body:getX(), self.body:getY())
 end
 
 function Player:update(dt, world)
