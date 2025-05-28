@@ -1,12 +1,13 @@
-local Actor = require("include.actor")
+local Destructible = require("include.destructible")
 
-local Projectile = Actor:extend()
+local Projectile = Destructible:extend()
 
 -- Create a new projectile.
 -- Takes the game physics world, starting x and y coords, radius
 -- the direction it was fired from, its density, and how long it should fly for.
 -- Also how much damage it does!
 function Projectile:new(world, x, y, mx, my, radius, force, density, lifetime, damage)
+    Projectile.super.new(self, x, y, 100, 0)
     local dx, dy = x - mx, y - my
 
     local d = math.sqrt ( dx * dx + dy * dy )
@@ -23,6 +24,7 @@ function Projectile:new(world, x, y, mx, my, radius, force, density, lifetime, d
     self.lifetime = lifetime or 1
     self.damage = damage
     self.timer = 0
+    self.tag = "projectile"
 end
 
 

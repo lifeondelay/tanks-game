@@ -6,6 +6,7 @@ local Bullet = Projectile:extend()
 -- mx and my are the coordinates for the bullet direction
 function Bullet:new(world, x, y, mx, my, radius, force, density, lifetime, damage)
     Bullet.super.new(self, world, x, y, mx, my, radius, force, density, lifetime, damage)
+    self.tag = "bullet"
 end
 
 function Bullet:update(dt)

@@ -1,10 +1,10 @@
-local Actor = require("include.actor")
+local Destructible = require("include.destructible")
 local Bullet = require("include.projectile.bullet")
 
-local Player = Actor:extend()
+local Player = Destructible:extend()
 
 function Player:new(world, x, y, radius)
-    Player.super.new(self, x, y)
+    Player.super.new(self, x, y, 100, 100, "player")
 
     print("World x passed to player = " .. self.x)
     print("World y passed to player = " .. self.y)
@@ -19,6 +19,7 @@ function Player:new(world, x, y, radius)
     self.fixture:setRestitution(0.9)
     self.gunBarrel = {}
     self.projectiles = {}
+    self.tag = "player"
 end
 
 function Player:draw()
