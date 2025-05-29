@@ -5,10 +5,17 @@ local TargetSmall = Target:extend()
 function TargetSmall:new(world, x, y)
     local health = 20
     local score = 10
+
     local shape = love.physics.newCircleShape(20)
     local body = love.physics.newBody(world, x, y, "dynamic")
-    body:setLinearDamping(1)
-    TargetSmall.super.new(self, world, x, y, health, score, body, shape, 5)
+    local fixture = love.physics.newFixture(body, shape, 5)
+    local density = 10
+
+    TargetSmall.super.new(self, world, x, y, health, score, body, shape, fixture, density)
+
+    self.body:setLinearDamping(1)
+    self.fixture:setUserData(self)
+    self.tag = "destructible"
 end
 
 function TargetSmall:update(dt)

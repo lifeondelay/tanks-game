@@ -1,17 +1,21 @@
 -- This class holds the base level members for a target.
 -- Rendering and updating should be handled by the subclass.
-local Actor = require("include.actor")
+local Destructible = require("include.destructible")
 
-local Target = Actor:extend()
+local Target = Destructible:extend()
 
-function Target:new(world, x, y, health, score, body, shape, density)
-    Target.super.new(self, x, y)
+function Target:new(world, x, y, health, score, body, shape, fixture, density)
+    self.tag = "target"
+    Target.super.new(self, x, y, world, health, score, self.tag, body, shape, fixture, density)
     self.health = health
     self.score = score
-
-    self.body = body or love.physics.newBody(world, x, y, "dynamic")
-    self.shape = shape or love.physics.newCircleShape(10)
-    self.fixture = love.physics.newFixture(self.body, self.shape, density)
 end
+
+-- function Target:takeDamage(damage)
+--     self.health = self.health - damage
+--     if self.health <= 0 then
+--         self:Destroy()
+--     end
+-- end
 
 return Target

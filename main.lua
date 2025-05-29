@@ -2,6 +2,7 @@ local Player = require("include.player")
 local Map = require("include.map.map")
 local TargetSmall = require("include.targets.targetSmall")
 local TargetUtils = require("include.targets.targetUtils")
+local Callbacks = require("include.world.callbacks")
 
 love.window.setMode(800, 800)
 
@@ -9,6 +10,7 @@ local width, height = love.graphics.getDimensions()
 local score = 0
 local world = love.physics.newWorld(0, 0, true)
 local targets = {}
+local destructibles = {}
 
 local player = Player(world, width/2, height/2)
 
@@ -37,12 +39,16 @@ local map = Map(world, 16, 16, new_map)
 function love.load()
     -- love.physics.setMeter(64)
     targets = TargetUtils.populateMap(world, width, height, map.real_map, player)
+    world:setCallbacks(Callbacks.onBeginContact, Callbacks.onEndContact, Callbacks.onPreSolve, Callbacks.onPostSolve)
 end
 
 
 function love.update(dt)
     world:update(dt)
-    player:update(dt, map)
+    player:update(dt, map, destructibles)
+    for _, projectile in ipairs(destructibles) do
+        projectile:update(dt)
+    end
 end
 
 function love.draw()
@@ -54,7 +60,11 @@ function love.draw()
     love.graphics.setColor(0, 0, 0)
 
     --- Draw the players bullets
-    for _, projectile in ipairs(player.projectiles) do
+    -- for _, projectile in ipairs(player.projectiles) do
+    --     projectile:draw()
+    -- end
+
+    for _, projectile in ipairs(destructibles) do
         projectile:draw()
     end
 
@@ -76,7 +86,7 @@ end
 
 function love.mousepressed(x, y, button, istouch)
    if button == 1 then
-      player:shoot(world, x, y)
+      player:shoot(world, x, y, destructibles)
    end
 end
 

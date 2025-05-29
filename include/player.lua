@@ -4,22 +4,31 @@ local Bullet = require("include.projectile.bullet")
 local Player = Destructible:extend()
 
 function Player:new(world, x, y, radius)
-    Player.super.new(self, x, y, 100, 100, "player")
+    self.radius = radius or 10
+    local body = love.physics.newBody(world, x, y, "dynamic")
+    body:setLinearDamping(10)
+    local shape = love.physics.newCircleShape(self.radius)
+    local fixture = love.physics.newFixture(body, shape, 2)
+    Player.super.new(self, x, y, world, 100, 100, "player", body, shape, fixture, 10)
 
     print("World x passed to player = " .. self.x)
     print("World y passed to player = " .. self.y)
 
-    self.radius = radius or 10
-    self.body = love.physics.newBody(world, self.x, self.y, "dynamic")
-    self.body:setLinearDamping(10)
-    self.shape = love.physics.newCircleShape(self.radius)
-    self.fixture = love.physics.newFixture(
-        self.body, self.shape, 2
-    )
-    self.fixture:setRestitution(0.9)
+    -- self.body = love.physics.newBody(world, self.x, self.y, "dynamic")
+    -- self.body:setLinearDamping(10)
+    -- self.shape = love.physics.newCircleShape(self.radius)
+    -- self.fixture = love.physics.newFixture(
+    --     self.body, self.shape, 2
+    -- )
+    -- self.fixture:setRestitution(0.9)
     self.gunBarrel = {}
     self.projectiles = {}
     self.tag = "player"
+    self.fixture:setUserData(self)
+
+
+    local text = self.body:getX() .. ", " .. self.body:getY()
+    print(text)
 end
 
 function Player:draw()
@@ -52,9 +61,9 @@ function Player:update(dt, world)
         self.body:applyForce(1000, 0)
     end
 
-    for i = 1, #self.projectiles do
-        self.projectiles[i]:update(dt)
-    end
+    -- for i = 1, #self.projectiles do
+    --     self.projectiles[i]:update(dt)
+    -- end
 
     self.x = self.body:getX()
     self.y = self.body:getY()
@@ -63,8 +72,8 @@ end
 
 -- Fire a projectile
 -- Psawn projectile at position of end of gunbarrel
-function Player:shoot(world, mx, my)
-    table.insert(self.projectiles, Bullet(world, self.gunBarrel.x, self.gunBarrel.y, mx, my, 5, 30, 3, 3, 10))
+function Player:shoot(world, mx, my, destructibles)
+    table.insert(destructibles, Bullet(world, self.gunBarrel.x, self.gunBarrel.y, mx, my, 5, 30, 3, 3, 10))
 end
 
 -- Get location of end-of-barrel to shoot from

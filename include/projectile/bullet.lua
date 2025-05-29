@@ -5,12 +5,26 @@ local Bullet = Projectile:extend()
 -- x and y are the spawn coordinates for the bullet
 -- mx and my are the coordinates for the bullet direction
 function Bullet:new(world, x, y, mx, my, radius, force, density, lifetime, damage)
-    Bullet.super.new(self, world, x, y, mx, my, radius, force, density, lifetime, damage)
-    self.tag = "bullet"
+    local body = love.physics.newBody(world, x, y, "dynamic")
+    local shape = love.physics.newCircleShape(radius)
+    local fixture = love.physics.newFixture(body, shape, density)
+    Bullet.super.new(self, x, y, world, lifetime, damage, body, shape, fixture)
+
+    local dx, dy = x - mx, y - my
+
+    local d = math.sqrt ( dx * dx + dy * dy )
+    local ndx, ndy = dx / d, dy / d
+
+    self.forceX = - ndx * force
+    self.forceY = - ndy * force
+
+    -- self.tag = "bullet"
+    self.fixture:setUserData(self)
+    self.tag = "destructible"
+
 end
 
 function Bullet:update(dt)
-
     if self.timer < self.lifetime then
         self.body:applyForce(self.forceX, self.forceY)
         self.timer = self.timer + dt
