@@ -4,11 +4,11 @@ local Bullet = Projectile:extend()
 
 -- x and y are the spawn coordinates for the bullet
 -- mx and my are the coordinates for the bullet direction
-function Bullet:new(world, x, y, mx, my, radius, force, density, lifetime, damage)
+function Bullet:new(world, parent, x, y, mx, my, radius, force, density, lifetime, damage)
     local body = love.physics.newBody(world, x, y, "dynamic")
     local shape = love.physics.newCircleShape(radius)
     local fixture = love.physics.newFixture(body, shape, density)
-    Bullet.super.new(self, x, y, world, lifetime, damage, body, shape, fixture)
+    Bullet.super.new(self, x, y, world, lifetime, damage, parent, body, shape, fixture)
 
     local dx, dy = x - mx, y - my
 

@@ -73,7 +73,7 @@ end
 -- Fire a projectile
 -- Psawn projectile at position of end of gunbarrel
 function Player:shoot(world, mx, my, destructibles)
-    table.insert(destructibles, Bullet(world, self.gunBarrel.x, self.gunBarrel.y, mx, my, 5, 30, 3, 3, 10))
+    table.insert(destructibles, Bullet(world, self, self.gunBarrel.x, self.gunBarrel.y, mx, my, 5, 30, 3, 3, 10))
 end
 
 -- Get location of end-of-barrel to shoot from

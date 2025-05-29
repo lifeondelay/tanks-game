@@ -27,6 +27,7 @@ end
 
 function Destructible:destroy()
     self.destroyed = true
+    self.fixture:destroy()
 end
 
 return Destructible

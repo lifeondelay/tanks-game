@@ -18,15 +18,12 @@ function TargetSmall:new(world, x, y)
     self.tag = "destructible"
 end
 
-function TargetSmall:update(dt)
-end
-
 function TargetSmall:draw()
     local text = self.body:getX() .. ", " .. self.body:getY()
     love.graphics.setColor(0.5, 0.5, 1)
     love.graphics.circle("fill", self.body:getX(), self.body:getY(), self.shape:getRadius())
     love.graphics.setColor(0, 0, 0)
-    -- love.graphics.print(text, self.body:getX(), self.body:getY())
+    love.graphics.print(self.health, self.body:getX(), self.body:getY())
 end
 
 return TargetSmall
