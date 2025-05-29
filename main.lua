@@ -3,6 +3,7 @@ local Map = require("include.map.map")
 local TargetSmall = require("include.targets.targetSmall")
 local TargetUtils = require("include.targets.targetUtils")
 local Callbacks = require("include.world.callbacks")
+local Destruction = require("include.world.destruction")
 
 love.window.setMode(800, 800)
 
@@ -47,27 +48,9 @@ function love.update(dt)
     world:update(dt)
     player:update(dt, map, destructibles)
 
-    local i = 1
-    while i <= #destructibles do
-        destructibles[i]:update(dt)
-        if destructibles[i].destroyed == true then
-            print("removing " .. destructibles[i].tag .. " at " .. destructibles[i].health .. " health")
-            table.remove(destructibles, i)
-        else
-            i = i + 1
-        end
-    end
-
-    local j = 1
-    while j <= #targets do
-        targets[j]:update(dt)
-        if targets[j].destroyed == true then
-            print("removing " .. targets[j].tag .. " at " .. targets[j].health .. " health")
-            table.remove(targets, j)
-        else
-            j = j + 1
-        end
-    end
+    -- Update lists of destructibles
+    Destruction.updateDestructibles(destructibles, dt)
+    Destruction.updateDestructibles(targets, dt)
 
 end
 

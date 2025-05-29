@@ -10,17 +10,6 @@ function Player:new(world, x, y, radius)
     local shape = love.physics.newCircleShape(self.radius)
     local fixture = love.physics.newFixture(body, shape, 2)
     Player.super.new(self, x, y, world, 100, 100, "player", body, shape, fixture, 10)
-
-    print("World x passed to player = " .. self.x)
-    print("World y passed to player = " .. self.y)
-
-    -- self.body = love.physics.newBody(world, self.x, self.y, "dynamic")
-    -- self.body:setLinearDamping(10)
-    -- self.shape = love.physics.newCircleShape(self.radius)
-    -- self.fixture = love.physics.newFixture(
-    --     self.body, self.shape, 2
-    -- )
-    -- self.fixture:setRestitution(0.9)
     self.gunBarrel = {}
     self.projectiles = {}
     self.tag = "player"
@@ -33,7 +22,6 @@ end
 
 function Player:draw()
     local text = self.body:getX() .. ", " .. self.body:getY()
-
 
     -- Draw line pointing to mouse
     love.graphics.line(self.x, self.y, self.gunBarrel.x, self.gunBarrel.y)
@@ -61,10 +49,6 @@ function Player:update(dt, world)
         self.body:applyForce(1000, 0)
     end
 
-    -- for i = 1, #self.projectiles do
-    --     self.projectiles[i]:update(dt)
-    -- end
-
     self.x = self.body:getX()
     self.y = self.body:getY()
     self.gunBarrel = self:getBarrel()
@@ -73,7 +57,8 @@ end
 -- Fire a projectile
 -- Psawn projectile at position of end of gunbarrel
 function Player:shoot(world, mx, my, destructibles)
-    table.insert(destructibles, Bullet(world, self, self.gunBarrel.x, self.gunBarrel.y, mx, my, 5, 30, 3, 3, 10))
+    local lifetime = 0.01
+    table.insert(destructibles, Bullet(world, self, self.gunBarrel.x, self.gunBarrel.y, mx, my, 5, 30, 3, lifetime, 10))
 end
 
 -- Get location of end-of-barrel to shoot from

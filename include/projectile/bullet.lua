@@ -21,12 +21,13 @@ function Bullet:new(world, parent, x, y, mx, my, radius, force, density, lifetim
     -- self.tag = "bullet"
     self.fixture:setUserData(self)
     self.tag = "destructible"
+    self.health = 10
 
 end
 
 function Bullet:update(dt)
     if self.timer < self.lifetime then
-        self.body:applyForce(self.forceX, self.forceY)
+        self.body:applyLinearImpulse(self.forceX, self.forceY)
         self.timer = self.timer + dt
     end
 
