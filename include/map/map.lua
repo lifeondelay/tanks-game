@@ -67,7 +67,7 @@ end
 function Map:draw()
     for _, block in ipairs(self.real_map) do
         love.graphics.setColor(0, 0, 0)
-        love.graphics.polygon("line", block.body:getWorldPoints(block.shape:getPoints()))
+        love.graphics.polygon("fill", block.body:getWorldPoints(block.shape:getPoints()))
         love.graphics.setColor(0, 0, 0)
     end
 end

@@ -3,7 +3,7 @@ local Bullet = require("include.projectile.bullet")
 
 local Player = Destructible:extend()
 
-function Player:new(world, x, y, radius)
+function Player:new(world, x, y, radius, xpBar)
     self.radius = radius or 10
     local body = love.physics.newBody(world, x, y, "dynamic")
     body:setLinearDamping(10)
@@ -14,10 +14,17 @@ function Player:new(world, x, y, radius)
     self.projectiles = {}
     self.tag = "player"
     self.fixture:setUserData(self)
+    self.experience = 0
+    self.maxExperience = 1000
+    self.xpBar = xpBar
 
 
     local text = self.body:getX() .. ", " .. self.body:getY()
     print(text)
+
+
+
+    self.xpBar:setNewLevel(0, 1000)
 end
 
 function Player:draw()
@@ -86,6 +93,12 @@ function Player:getBarrel()
     ends.y = self.y + ny * lineLength
 
     return ends
+end
+
+function Player:addExperience(amount)
+    print("adding " .. amount .. " experience")
+    self.experience = self.experience + amount
+    self.xpBar:addExperience(amount)
 end
 
 return Player

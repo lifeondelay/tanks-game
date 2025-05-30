@@ -19,7 +19,6 @@ end
 
 function Destructible:doDamage(amount)
     self.health = self.health - amount
-    print(self.health)
     if self.health <= 0 then
         self:destroy()
     end

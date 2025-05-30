@@ -5,7 +5,7 @@ function Destruction.updateDestructibles(destructibles, dt)
     while i <= #destructibles do
         destructibles[i]:update(dt)
         if destructibles[i].destroyed == true then
-            print("removing " .. destructibles[i].tag .. " at " .. destructibles[i].health .. " health")
+            -- print("removing " .. destructibles[i].tag .. " at " .. destructibles[i].health .. " health")
             table.remove(destructibles, i)
         else
             i = i + 1

@@ -4,16 +4,19 @@ local TargetSmall = require("include.targets.targetSmall")
 local TargetUtils = require("include.targets.targetUtils")
 local Callbacks = require("include.world.callbacks")
 local Destruction = require("include.world.destruction")
+local ExperienceBar = require("include.ui.experienceBar")
 
 love.window.setMode(800, 800)
 
 local width, height = love.graphics.getDimensions()
-local score = 0
 local world = love.physics.newWorld(0, 0, true)
 local targets = {}
 local destructibles = {}
 
-local player = Player(world, width/2, height/2)
+local experienceBar = ExperienceBar(width * 0.05, height * 0.95, width * 0.3, height * 0.04)
+
+local player = Player(world, width/2, height/2, 10, experienceBar)
+
 
 local new_map =
 {
@@ -27,7 +30,7 @@ local new_map =
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1},
@@ -41,12 +44,14 @@ function love.load()
     -- love.physics.setMeter(64)
     targets = TargetUtils.populateMap(world, width, height, map.real_map, player)
     world:setCallbacks(Callbacks.onBeginContact, Callbacks.onEndContact, Callbacks.onPreSolve, Callbacks.onPostSolve)
+    
 end
 
 
 function love.update(dt)
     world:update(dt)
     player:update(dt, map, destructibles)
+    experienceBar:update(dt)
 
     -- Update lists of destructibles
     Destruction.updateDestructibles(destructibles, dt)
@@ -62,11 +67,6 @@ function love.draw()
 
     love.graphics.setColor(0, 0, 0)
 
-    --- Draw the players bullets
-    -- for _, projectile in ipairs(player.projectiles) do
-    --     projectile:draw()
-    -- end
-
     for _, projectile in ipairs(destructibles) do
         projectile:draw()
     end
@@ -79,12 +79,10 @@ function love.draw()
 
     -- draw the map
     map:draw(width, height)
-
-    love.graphics.setColor(0, 0, 0)
-    love.graphics.print(score, 0, 0)
     love.graphics.setBackgroundColor(1, 1, 1)
 
-
+    love.graphics.setColor(0, 0, 1)
+    experienceBar:draw()
 end
 
 function love.mousepressed(x, y, button, istouch)

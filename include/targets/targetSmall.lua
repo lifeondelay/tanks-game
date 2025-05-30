@@ -4,7 +4,7 @@ local TargetSmall = Target:extend()
 
 function TargetSmall:new(world, x, y)
     local health = 20
-    local score = 10
+    local score = 100
 
     local shape = love.physics.newCircleShape(20)
     local body = love.physics.newBody(world, x, y, "dynamic")
