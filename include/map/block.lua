@@ -12,6 +12,8 @@ function Block:new(world, x, y, width, height)
     self.x = x
     self.y = y
 
+    self.tag = "wall"
+
     self.fixture:setUserData(self)
 end
 

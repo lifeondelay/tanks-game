@@ -12,6 +12,7 @@ function Projectile:new(world, x, y, lifetime, damage, parent, body, shape, fixt
     self.damage = damage
     self.timer = 0
     self.tag = "destructible"
+    self.parent = parent
 end
 
 
