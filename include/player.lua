@@ -21,14 +21,14 @@ function Player:new(world, x, y, radius, xpBar)
 
     self.gunBarrel = {}
     self.projectiles = {}
-    self.tag = "player"
+    self:addTag("player")
     self.fixture:setUserData(self)
     self.experience = 0
     self.maxExperience = 1000
     self.xpBar = xpBar
 
     -- This is checked by the levelling-up ui, to see whether to draw
-    self.isLevellingUp = false
+    self.timesToLevel = 0
 
     -- Poitns are used to upgrade player stats
     self.points = 0
@@ -126,7 +126,7 @@ function Player:levelUp()
     self.level = self.level + 1
     self.xpBar:setNewLevel(0, 200, self.level)
     self.xpBar.maxedOut = false
-    self.isLevellingUp = true
+    self.timesToLevel = self.timesToLevel + 1
 end
 
 return Player

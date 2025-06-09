@@ -15,7 +15,6 @@ function TargetSmall:new(world, x, y)
 
     self.body:setLinearDamping(1)
     self.fixture:setUserData(self)
-    self.tag = "destructible"
 end
 
 function TargetSmall:draw()

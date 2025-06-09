@@ -20,7 +20,7 @@ function Bullet:new(world, parent, x, y, mx, my, radius, force, density, lifetim
 
     -- self.tag = "bullet"
     self.fixture:setUserData(self)
-    self.tag = "destructible"
+    self:addTag("bullet")
     self.health = 10
 
 end

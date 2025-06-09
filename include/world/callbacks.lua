@@ -7,24 +7,26 @@ function Callbacks.onBeginContact(a, b, coll)
     local wall = nil
     local notWall = nil
 
-    if o1 and o2 then
+    if o1 and o2 and o1.tags and o2.tags then
 
-        if o1.tag == "wall" then
+        if Utility:tableContains(o1.tags, "wall") then
             wall = o1
             notWall = o2
-        elseif o2.tag == "wall" then
+        elseif Utility:tableContains(o2.tags,"wall") then
             wall = o2
             notWall = o1
         end
 
-        if wall and notWall and notWall.tag == "projectile" then
+        if wall and notWall and Utility:tableContains(notWall.tags, "projectile") then
+            print("hitwall")
             notWall:doDamage(notWall.health)
+            return
         end
 
         -- print(o1.tag ..  ", " .. o2.tag)
-        if o1.tag == "destructible" and o2.tag == "destructible" then
+        if Utility:tableContains(o1.tags, "destructible") and Utility:tableContains(o2.tags, "destructible") then
 
-            if o2.parent and o2.parent.tag == "player" and o1.parent and o1.parent.tag == "player" then
+            if o2.parent and Utility:tableContains(o2.parent.tags, "player") and o1.parent and Utility:tableContains(o1.parent.tags, "player") then
                 -- do nothing if the owner of both destructibles is the player
                 return
             end
@@ -33,11 +35,13 @@ function Callbacks.onBeginContact(a, b, coll)
             o1:doDamage(o2.damage)
             o2:doDamage(o1.damage)
 
-            if o1.parent and o1.parent.tag == "player" and o2.destroyed == true then
-                print(o1.parent.tag)
+            if o1.parent then
+                print(o1.parent.tags)
+            end
+
+            if o1.parent and Utility:tableContains(o1.parent.tags, "player") and o2.destroyed == true then
                 o1.parent:addExperience(o2.score)
-            elseif o2.parent and o2.parent.tag == "player" and o1.destroyed == true then
-                print(o2.parent.tag)
+            elseif o2.parent and Utility:tableContains(o2.parent.tags, "player") and o1.destroyed == true then
                 o2.parent:addExperience(o1.score)
             end
         end

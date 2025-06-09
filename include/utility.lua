@@ -7,7 +7,12 @@ end
 
 -- Check if a table contains an item
 function Utility:tableContains(table, value)
-    for i = 1,#table do
+    if not table then
+        print(value)
+        return
+    end
+
+    for i = 1, #table do
             if (table[i] == value) then
                 return true
             end

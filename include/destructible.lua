@@ -11,9 +11,9 @@ function Destructible:new(x, y, world, health, score, parent, body, shape, fixtu
     self.shape = shape
     self.fixture = fixture
 
-    self.tag = "destructible"
+    self:addTag("destructible")
     self.destroyed = false
-    self.damage = 10
+    self.damage = 0
     self.parent = parent or nil
 end
 

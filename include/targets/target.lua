@@ -5,10 +5,12 @@ local Destructible = require("include.destructible")
 local Target = Destructible:extend()
 
 function Target:new(world, x, y, health, score, body, shape, fixture, density)
-    self.tag = "target"
-    Target.super.new(self, x, y, world, health, score, self.tag, body, shape, fixture, density)
+    Target.super.new(self, x, y, world, health, score, self, body, shape, fixture, density)
+    self:addTag("target")
+    self:addTag("enemy")
     self.health = health
     self.score = score
+    self.damage = 10
 end
 
 -- function Target:takeDamage(damage)
