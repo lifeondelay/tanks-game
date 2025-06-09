@@ -11,7 +11,8 @@ function Projectile:new(world, x, y, lifetime, damage, parent, body, shape, fixt
     self.lifetime = lifetime or 1
     self.damage = damage
     self.timer = 0
-    self.tag = "destructible"
+    self:addTag("projectile")
+    self.parent = parent
 end
 
 

@@ -20,6 +20,8 @@ function ExperienceBar:new(x, y, width, height)
     self.width = width or 100
     self.height = height or 20
     self.innerMaxWidth = self.width - 2 * self.margin
+    self.maxedOut = false
+    self.level = 1
 end
 
 function ExperienceBar:draw()
@@ -38,6 +40,7 @@ function ExperienceBar:draw()
     love.graphics.setColor(1, 1, 1)
     love.graphics.setFont(love.graphics.newFont(14))
     love.graphics.print(scoreText, textX, textY)
+    love.graphics.print(self.level, textX + 100, textY)
 end
 
 function ExperienceBar:addExperience(amount)
@@ -47,6 +50,9 @@ function ExperienceBar:addExperience(amount)
         self.currentXp = math.min(self.currentXp + amount, self.maxXp)
         animElapsed = 0
         isAnimating = true
+        if self.currentXp >= self.maxXp then
+            self.maxedOut = true
+        end
     end
     print(self.currentXp)
 end
@@ -63,10 +69,15 @@ function ExperienceBar:update(dt)
             isAnimating = false
         end
     end
+
+
 end
 
-function ExperienceBar:setNewLevel(startingXp, maxXp)
+function ExperienceBar:setNewLevel(startingXp, maxXp, level)
+    self.previousXp = 0
+    self.currentXp = 0
     self.maxXp = maxXp
+    self.level = level
     self:addExperience(startingXp)
 end
 
