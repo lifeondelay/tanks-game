@@ -18,13 +18,18 @@ function Player:new(world, x, y, radius, xpBar)
     self.maxExperience = 1000
     self.xpBar = xpBar
 
+    -- Poitns are used to upgrade player stats
+    self.points = 0
+
+    -- Level number is the number of times a player has reached the maximum XP in a level
+    self.level = 1
 
     local text = self.body:getX() .. ", " .. self.body:getY()
     print(text)
 
 
 
-    self.xpBar:setNewLevel(0, 1000)
+    self.xpBar:setNewLevel(0, 200, 1)
 end
 
 function Player:draw()
@@ -99,6 +104,16 @@ function Player:addExperience(amount)
     print("adding " .. amount .. " experience")
     self.experience = self.experience + amount
     self.xpBar:addExperience(amount)
+
+    if self.xpBar.maxedOut == true then
+        self:levelUp()
+    end
+end
+
+function Player:levelUp()
+    self.level = self.level + 1
+    self.xpBar:setNewLevel(0, 1000, self.level)
+    self.xpBar.maxedOut = false
 end
 
 return Player
