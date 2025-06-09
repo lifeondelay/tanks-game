@@ -18,12 +18,10 @@ function Callbacks.onBeginContact(a, b, coll)
         end
 
         if wall and notWall and Utility:tableContains(notWall.tags, "projectile") then
-            print("hitwall")
             notWall:doDamage(notWall.health)
             return
         end
 
-        -- print(o1.tag ..  ", " .. o2.tag)
         if Utility:tableContains(o1.tags, "destructible") and Utility:tableContains(o2.tags, "destructible") then
 
             if o2.parent and Utility:tableContains(o2.parent.tags, "player") and o1.parent and Utility:tableContains(o1.parent.tags, "player") then
@@ -34,10 +32,6 @@ function Callbacks.onBeginContact(a, b, coll)
             -- Apply damage to both objects
             o1:doDamage(o2.damage)
             o2:doDamage(o1.damage)
-
-            if o1.parent then
-                print(o1.parent.tags)
-            end
 
             if o1.parent and Utility:tableContains(o1.parent.tags, "player") and o2.destroyed == true then
                 o1.parent:addExperience(o2.score)

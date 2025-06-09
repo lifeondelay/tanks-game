@@ -18,7 +18,6 @@ function Bullet:new(world, parent, x, y, mx, my, radius, force, density, lifetim
     self.forceX = - ndx * force
     self.forceY = - ndy * force
 
-    -- self.tag = "bullet"
     self.fixture:setUserData(self)
     self:addTag("bullet")
     self.health = 10
@@ -34,12 +33,9 @@ function Bullet:update(dt)
 end
 
 function Bullet:draw()
-    local text = self.body:getX() .. ", " .. self.body:getY()
     love.graphics.setColor(0, 0, 0)
     love.graphics.circle("fill", self.body:getX(), self.body:getY(), self.shape:getRadius())
     love.graphics.setColor(0, 0, 0)
-    -- love.graphics.print(text, self.body:getX(), self.body:getY())
-
 end
 
 return Bullet
