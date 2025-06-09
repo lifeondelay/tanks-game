@@ -5,6 +5,8 @@ local TargetUtils = require("include.targets.targetUtils")
 local Callbacks = require("include.world.callbacks")
 local Destruction = require("include.world.destruction")
 local ExperienceBar = require("include.ui.experienceBar")
+local LevelUpMenu = require("include.ui.levelUpMenu")
+local suit = require("include/suit")
 
 love.window.setMode(800, 800)
 
@@ -13,9 +15,7 @@ local world = love.physics.newWorld(0, 0, true)
 local targets = {}
 local destructibles = {}
 
-local experienceBar = ExperienceBar(width * 0.05, height * 0.95, width * 0.3, height * 0.04)
 
-local player = Player(world, width/2, height/2, 10, experienceBar)
 
 
 local new_map =
@@ -39,6 +39,10 @@ local new_map =
 }
 
 local map = Map(world, 16, 16, new_map)
+local levelUi = {x = map.block_size, y = height * 0.95}
+local experienceBar = ExperienceBar(levelUi.x, levelUi.y, map.block_size * 5, height * 0.04)
+local player = Player(world, width/2, height/2, 10, experienceBar)
+local levelUpMenu = LevelUpMenu(levelUi.x, levelUi.y - experienceBar.height * 2, experienceBar.width, experienceBar.height * 10, player)
 
 function love.load()
     -- love.physics.setMeter(64)
@@ -57,6 +61,7 @@ function love.update(dt)
     Destruction.updateDestructibles(destructibles, dt)
     Destruction.updateDestructibles(targets, dt)
 
+    levelUpMenu:update(dt)
 end
 
 function love.draw()
@@ -83,6 +88,8 @@ function love.draw()
 
     love.graphics.setColor(0, 0, 1)
     experienceBar:draw()
+
+    suit.draw()
 end
 
 function love.mousepressed(x, y, button, istouch)
