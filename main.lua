@@ -15,9 +15,6 @@ local world = love.physics.newWorld(0, 0, true)
 local targets = {}
 local destructibles = {}
 
-
-
-
 local new_map =
 {
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
@@ -40,7 +37,7 @@ local new_map =
 
 local map = Map(world, 16, 16, new_map)
 local levelUi = {x = map.block_size, y = height * 0.95}
-local experienceBar = ExperienceBar(levelUi.x, levelUi.y, map.block_size * 5, height * 0.04)
+local experienceBar = ExperienceBar(levelUi.x, levelUi.y, map.block_size * 10, height * 0.04)
 local player = Player(world, width/2, height/2, 10, experienceBar)
 local levelUpMenu = LevelUpMenu(levelUi.x, levelUi.y - experienceBar.height * 2, experienceBar.width, experienceBar.height * 10, player)
 
@@ -48,7 +45,6 @@ function love.load()
     -- love.physics.setMeter(64)
     targets = TargetUtils.populateMap(world, width, height, map.real_map, player)
     world:setCallbacks(Callbacks.onBeginContact, Callbacks.onEndContact, Callbacks.onPreSolve, Callbacks.onPostSolve)
-    
 end
 
 

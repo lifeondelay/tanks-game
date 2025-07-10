@@ -1,5 +1,6 @@
 local Destructible = require("include.destructible")
 local Bullet = require("include.projectile.bullet")
+local StatusBar = require("include.ui.statusBar")
 
 local Player = Destructible:extend()
 
@@ -26,6 +27,8 @@ function Player:new(world, x, y, radius, xpBar)
     self.experience = 0
     self.maxExperience = 1000
     self.xpBar = xpBar
+    self.statusBar = StatusBar(self.x, self.y + 10, self.width, 10, self.baseHealth)
+    self.statusBar:updateHealth(self.baseHealth, "heal");
 
     -- This is checked by the levelling-up ui, to see whether to draw
     self.timesToLevel = 0
@@ -38,8 +41,6 @@ function Player:new(world, x, y, radius, xpBar)
 
     local text = self.body:getX() .. ", " .. self.body:getY()
     print(text)
-
-
 
     self.xpBar:setNewLevel(0, 200, 1)
 end
@@ -54,6 +55,7 @@ function Player:draw()
     love.graphics.circle("fill", self.x, self.y, self.radius)
     love.graphics.setColor(0, 0, 0)
     -- love.graphics.print(text, self.body:getX(), self.body:getY())
+    self.statusBar:draw()
 end
 
 function Player:update(dt, world)
@@ -76,13 +78,26 @@ function Player:update(dt, world)
     self.x = self.body:getX()
     self.y = self.body:getY()
     self.gunBarrel = self:getBarrel()
+    self.statusBar:updatePosition(self.x, self.y)
+    self.statusBar:update(dt)
 end
 
 -- Fire a projectile
 -- Psawn projectile at position of end of gunbarrel
 function Player:shoot(world, mx, my, destructibles)
     local lifetime = 0.01
-    table.insert(destructibles, Bullet(world, self, self.gunBarrel.x, self.gunBarrel.y, mx, my, 5, 30 * self.baseProjectileSpeed, 3, lifetime, 10 * self.baseProjectileDamage))
+    table.insert(destructibles, Bullet(
+    world,
+    self,
+    self.gunBarrel.x,
+    self.gunBarrel.y,
+    mx,
+    my,
+    5,
+    30 * self.baseProjectileSpeed,
+    3,
+    lifetime,
+    10 * self.baseProjectileDamage))
 end
 
 -- Get location of end-of-barrel to shoot from

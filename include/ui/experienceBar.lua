@@ -8,6 +8,8 @@ local animElapsed = 0
 
 local ExperienceBar = Actor:extend()
 
+local xpShader
+
 function ExperienceBar:new(x, y, width, height)
     self.x = x
     self.y = y
@@ -22,6 +24,7 @@ function ExperienceBar:new(x, y, width, height)
     self.innerMaxWidth = self.width - 2 * self.margin
     self.maxedOut = false
     self.level = 1
+    xpShader = love.graphics.newShader("shader/gradient.glsl")
 end
 
 function ExperienceBar:draw()
@@ -30,17 +33,30 @@ function ExperienceBar:draw()
     local innerHeight = self.height - 2 * self.margin
     local scoreText = (math.floor(self.displayedXp) .. "/" .. self.maxXp)
     local textX = self.x + self.width / 2 - self.margin
-    local textY = self.y + self.height / 2 - self.margin
-    local fillWidth = (self.displayedXp / self.maxXp) * (self.width - 2 * self.margin)
+    local textY = self.y + self.height / 2 - self.margin - 5
+    local fillWidth = self.width - 2 * self.margin
+    -- local fillWidth = (self.displayedXp / self.maxXp) * (self.width - 2 * self.margin)
+
+    local verts = {
+        {innerX, innerY, 0, 0},                    -- top-left
+        {innerX + fillWidth, innerY, 1, 0},            -- top-right
+        {innerX + fillWidth, innerY + innerHeight, 1, 1},    -- bottom-right
+        {innerX, innerY + innerHeight, 0, 1},            -- bottom-left
+    }
+    local mesh = love.graphics.newMesh(verts, "fan", "static")
+
+    xpShader:send("time", love.timer.getTime())
+    xpShader:send("fillRatio", math.max(self.displayedXp / self.maxXp, 0))
 
     love.graphics.setColor(0.1, 0.1, 0.1)
     love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
-    love.graphics.setColor(0, 0.5, 0)
-    love.graphics.rectangle("fill", innerX, innerY, fillWidth, innerHeight)
+    love.graphics.setShader(xpShader)
     love.graphics.setColor(1, 1, 1)
+    love.graphics.draw(mesh)
+    love.graphics.setShader()
     love.graphics.setFont(love.graphics.newFont(14))
-    love.graphics.print(scoreText, textX, textY)
-    love.graphics.print(self.level, textX + 100, textY)
+    love.graphics.print(scoreText, fillWidth / 2, textY)
+    love.graphics.print(self.level, fillWidth + 100, textY)
 end
 
 function ExperienceBar:addExperience(amount)
@@ -69,8 +85,6 @@ function ExperienceBar:update(dt)
             isAnimating = false
         end
     end
-
-
 end
 
 function ExperienceBar:setNewLevel(startingXp, maxXp, level)
